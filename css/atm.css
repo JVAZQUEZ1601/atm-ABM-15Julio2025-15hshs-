@@ -1,0 +1,64 @@
+:root{
+  --azul:#007bff;--amarillo:#ffc107;--rojo:#dc3545;
+  --verde:#28a745;--gris:#6c757d;--fondo-modal:rgba(0,0,0,.55);
+}
+
+body{font-family:Arial,sans-serif;margin:2rem;background:#f9f9f9;}
+h1,h2{text-align:center;margin-bottom:1rem}
+
+/* ---------- Formulario ---------- */
+form{
+  max-width:620px;margin:0 auto 2rem;padding:1.5rem;background:#fff;
+  border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+label{display:block;margin-bottom:.5rem;font-weight:bold}
+input,select,textarea{
+  width:100%;padding:.6rem;margin-bottom:1rem;border:1px solid #ccc;border-radius:4px;
+}
+input[readonly]{background:#e9ecef}
+.acciones-form{display:flex;gap:.8rem}
+button{padding:.6rem 1.2rem;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:#fff;}
+#submitBtn{background:var(--azul)}
+#submitBtn:disabled{background:var(--gris);cursor:not-allowed}      /* <<< nuevo >>> */
+#confirmDeleteBtn{background:var(--rojo)}
+#confirmDeleteBtn:disabled{background:var(--gris);cursor:not-allowed}
+
+/* ---------- Tabla ---------- */
+table{width:100%;max-width:1000px;margin:2rem auto;border-collapse:collapse;background:#fff;}
+th,td{padding:.6rem .8rem;border:1px solid #ccc;text-align:left}
+th{background:#e4e7eb}
+tbody tr:nth-child(odd){background:#f5f7fa}
+
+/* ---------- Tarjetas ---------- */
+.tarjetas-container{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center}
+.tarjeta{
+  background:#fff;border:1px solid #ddd;border-radius:8px;
+  padding:1rem 1rem 2.2rem;width:260px;box-shadow:0 2px 5px rgba(0,0,0,.1);position:relative;
+}
+.tarjeta img{width:100%;border-radius:8px;margin-bottom:10px}
+
+/* Botones tarjeta */
+.btn-card{position:absolute;padding:.3rem .6rem;font-size:.8rem;font-weight:bold;border:none;border-radius:4px;cursor:pointer}
+.editar-btn{background:var(--amarillo);color:#000}
+.eliminar-btn{background:var(--rojo);color:#fff}
+.el-card{bottom:8px;right:8px}
+.editar-btn:not(.btn-card){margin-left:.4rem}
+
+/* Estados */
+.estado-libre{color:var(--verde);font-weight:bold}
+.estado-ocupado{color:var(--rojo);font-weight:bold}
+
+/* ---------- Modal ---------- */
+#authModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:var(--fondo-modal);z-index:1000;}
+#authModal.active{display:flex}
+.modal-content{
+  background:#fff;padding:1.5rem 2rem;border-radius:8px;max-width:320px;width:100%;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);text-align:center;
+}
+.modal-content h3{margin-top:0}
+.modal-content input{margin-bottom:.8rem}
+.modal-actions{display:flex;gap:.6rem;justify-content:center}
+.modal-btn{flex:1;padding:.5rem;border:none;border-radius:4px;font-weight:bold;color:#fff;cursor:pointer}
+#authOk{background:var(--azul)}
+#authCancel{background:var(--gris)}
+.error-msg{color:var(--rojo);font-size:.85rem;height:1.2rem;margin-bottom:.6rem}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Historial de ATMs</title>
+  <link rel="stylesheet" href="css/atm.css">
+</head>
+<body>
+  <h1>HISTORIAL DE REGISTROS DE ATMs</h1>
+
+  <!-- Tabla de historial -->
+  <table id="tablaHistorial">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>ID</th>
+        <th>IP</th>
+        <th>MARCA</th>
+        <th>MODELO</th>
+        <th>SOFTWARE</th>
+        <th>Reservado por</th>
+        <th>Fecha hasta</th>
+        <th>Estado</th>
+        <th>Tipo</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script type="module">
+    const STORAGE_KEY = 'registrosUsuario';
+    const BAJAS_KEY = 'historialBajas';
+    const tbody = document.querySelector('#tablaHistorial tbody');
+
+    function obtenerClaves(clave) {
+      return JSON.parse(localStorage.getItem(clave)) || [];
+    }
+
+    function calcularEstado(fechaHasta) {
+      if (!fechaHasta) return { txt: '', cls: '' };
+      const hoy = new Date();
+      const fecha = new Date(`${fechaHasta}T00:00:00`);
+      return (fecha < hoy.setHours(0, 0, 0, 0))
+        ? { txt: 'LIBRE', cls: 'estado-libre' }
+        : { txt: 'OCUPADO', cls: 'estado-ocupado' };
+    }
+
+    function renderHistorial() {
+  const altas = JSON.parse(localStorage.getItem('registrosUsuario')) || [];
+  const bajas = JSON.parse(localStorage.getItem('historialBajas')) || [];
+
+  const historial = [
+    ...altas.map(r => ({ ...r, tipo: 'ALTA' })),
+    ...bajas.map(r => ({ ...r, tipo: 'BAJA' }))
+  ];
+
+  tbody.innerHTML = '';
+  historial.forEach((registro, i) => {
+    const estado = calcularEstado(registro.fechaHasta);
+    tbody.insertAdjacentHTML('beforeend', `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${registro.nombre}</td>
+        <td>${registro.apellido}</td>
+        <td>${registro.marca}</td>
+        <td>${registro.modelo}</td>
+        <td>${registro.software}</td>
+        <td>${registro.reservadoPor}</td>
+        <td>${registro.fechaHasta}</td>
+        <td class="${estado.cls}">${estado.txt}</td>
+        <td><strong>${registro.tipo}</strong></td>
+      </tr>
+    `);
+  });
+}
+
+
+    document.addEventListener('DOMContentLoaded', renderHistorial);
+  </script>
+</body>
+</html>

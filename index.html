@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alta – Reserva – Dashboard de ATMs</title>
+
+  <style>
+    :root {
+      --azul: #0d6efd;
+      --gris-fondo: #f2f4f7;
+      --gris-claro: #e1e5ea;
+      --rojo: #dc3545;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: var(--gris-fondo);
+      color: #222;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    a {
+      display: inline-block;
+      margin: 0.5rem 0;
+      padding: 0.6rem 1.2rem;
+      background: var(--azul);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 0.35rem;
+      transition: opacity 0.15s;
+    }
+
+    a:hover {
+      opacity: 0.85;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 2rem 2.5rem;
+      border-radius: 0.5rem;
+      min-width: 260px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-content h2 {
+      margin: 0.2rem 0 1rem;
+      font-size: 1.25rem;
+      text-align: center;
+    }
+
+    .modal-content label {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 0.45rem 0.6rem;
+      border: 1px solid var(--gris-claro);
+      border-radius: 0.35rem;
+    }
+
+    .modal-buttons {
+      margin-top: 0.8rem;
+      display: flex;
+      gap: 0.8rem;
+      justify-content: flex-end;
+    }
+
+    .modal-buttons button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.35rem;
+      cursor: pointer;
+    }
+
+    .modal-buttons button[type="submit"] {
+      background: var(--azul);
+      color: #fff;
+    }
+
+    .modal-buttons #cancelBtn {
+      background: var(--gris-claro);
+    }
+
+    .modal-buttons button:hover {
+      opacity: 0.9;
+    }
+
+    .error {
+      color: var(--rojo);
+      font-size: 0.9rem;
+      min-height: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Alta – Reserva y Dashboard de ATMs</h1>
+
+  <a href="#" id="altaLink" data-target="index-alta.html">Alta de ATM</a><br />
+  <a href="index-reserva.html">Reserva de ATM</a><br />
+  <a href="index-dashboard.html">Dashboard de ATMs</a><br>
+  <a href="historial‑atms.html">Historial de ATMs</a>
+
+  <!-- MODAL DE AUTENTICACIÓN -->
+  <div id="authModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal-content">
+      <h2 id="authTitle">Autenticación requerida</h2>
+      <form id="authForm" novalidate autocomplete="off">
+        <div>
+          <label for="username">Usuario</label>
+          <input type="text" id="username" name="username" required autocomplete="off" />
+        </div>
+        <div>
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" name="password" required autocomplete="off" />
+        </div>
+        <div class="modal-buttons">
+          <button type="button" id="cancelBtn">Cancelar</button>
+          <button type="submit">Ingresar</button>
+        </div>
+        <p id="authError" class="error"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const CREDENTIALS = { user: 'admin', pass: '1234' };
+
+    const altaLink = document.getElementById('altaLink');
+    const modal = document.getElementById('authModal');
+    const authForm = document.getElementById('authForm');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const errorBox = document.getElementById('authError');
+    const usrInput = document.getElementById('username');
+    const pwdInput = document.getElementById('password');
+
+    altaLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      showModal();
+    });
+
+    cancelBtn.addEventListener('click', () => hideModal());
+
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = usrInput.value.trim();
+      const p = pwdInput.value.trim();
+
+      if (u === CREDENTIALS.user && p === CREDENTIALS.pass) {
+        window.location.href = altaLink.dataset.target;
+      } else {
+        errorBox.textContent = 'Credenciales incorrectas. Intente nuevamente.';
+        pwdInput.value = '';
+        pwdInput.focus();
+      }
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) hideModal();
+    });
+
+    function showModal() {
+      errorBox.textContent = '';
+      authForm.reset();
+      modal.style.display = 'flex';
+      usrInput.focus();
+    }
+
+    function hideModal() {
+      modal.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Listado de ATMs – Dashboard</title>
+
+  <!-- Estilos comunes -->
+  <link rel="stylesheet" href="css/atm.css">
+
+  <!-- Estilos específicos del dashboard -->
+  <style>
+    /* 1) Ocultar formulario, tabla y su encabezado */
+    #registroForm,
+    #tablaHistorial,
+    h2:first-of-type        { display:none !important; }
+
+    /* 2) Ocultar botones Editar y Eliminar dentro de las tarjetas */
+    .tarjeta .editar-btn,
+    .tarjeta .eliminar-btn  { display:none !important; }
+  </style>
+</head>
+
+<body>
+<h1>DASHBOARD DE ATMs</h1>
+
+<!-- ========== Formulario (queda oculto) ========== -->
+<form id="registroForm" autocomplete="off">
+  <label>ID <input type="text" id="nombre" required></label>
+  <label>IP <input type="text" id="apellido" required></label>
+  <label>MARCA <input type="text" id="marca" required></label>
+  <label>MODELO <input type="text" id="modelo" required></label>
+  <label>SOFTWARE <input type="text" id="software" required></label>
+  <label>Reservado por <textarea id="reservadoPor" rows="4" required></textarea></label>
+  <label>Fecha hasta <input type="date" id="fechaHasta" required></label>
+  <label>Estado <input type="text" id="estado" readonly></label>
+  <label>Foto
+    <select id="imagen" required>
+      <option value="" disabled selected>Seleccionar imagen</option>
+      <option value="cajero.jpg">cajero.jpg</option>
+      <option value="cajero1.png">cajero1.png</option>
+    </select>
+  </label>
+  <div class="acciones-form">
+    <button type="submit" id="submitBtn">Guardar</button>
+    <button type="button" id="confirmDeleteBtn" disabled>ConfirmarDelete</button>
+  </div>
+</form>
+
+<!-- ========== Tabla (queda oculta) ========== -->
+<h2>Listado de ATMs</h2>
+<table id="tablaHistorial">
+  <thead>
+    <tr>
+      <th>#</th><th>ID</th><th>IP</th><th>MARCA</th><th>MODELO</th><th>SOFTWARE</th>
+      <th>Reservado por</th><th>Fecha hasta</th><th>Estado</th><th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- ========== Tarjetas (único bloque visible) ========== -->
+<h2></h2>
+<div class="tarjetas-container" id="tarjetasContainer"></div>
+
+<!-- ========== Modal de autenticación ========== -->
+<div id="authModal">
+  <div class="modal-content">
+    <h3>Autenticación requerida</h3>
+    <input type="text" id="authUser" placeholder="Usuario">
+    <input type="password" id="authPass" placeholder="Contraseña">
+    <div class="error-msg" id="authError"></div>
+    <div class="modal-actions">
+      <button class="modal-btn" id="authOk">Acceder</button>
+      <button class="modal-btn" id="authCancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lógica común -->
+<script type="module" src="js/atm.js"></script>
+</body>
+</html>
