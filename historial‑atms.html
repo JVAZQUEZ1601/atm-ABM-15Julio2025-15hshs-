@@ -8,74 +8,55 @@
 <body>
   <h1>HISTORIAL DE REGISTROS DE ATMs</h1>
 
-  <!-- Tabla de historial -->
   <table id="tablaHistorial">
     <thead>
       <tr>
-        <th>#</th>
-        <th>ID</th>
-        <th>IP</th>
-        <th>MARCA</th>
-        <th>MODELO</th>
-        <th>SOFTWARE</th>
-        <th>Reservado por</th>
-        <th>Fecha hasta</th>
-        <th>Estado</th>
-        <th>Tipo</th>
+        <th>#</th><th>Acción</th><th>Fecha y hora</th><th>ID</th><th>IP</th>
+        <th>MARCA</th><th>MODELO</th><th>SOFTWARE</th>
+        <th>Reservado por</th><th>Fecha hasta</th><th>Estado</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
   <script type="module">
-    const STORAGE_KEY = 'registrosUsuario';
-    const BAJAS_KEY = 'historialBajas';
-    const tbody = document.querySelector('#tablaHistorial tbody');
+    const HISTORY_KEY = 'historialATM';
+    const tbody       = document.querySelector('#tablaHistorial tbody');
 
-    function obtenerClaves(clave) {
-      return JSON.parse(localStorage.getItem(clave)) || [];
-    }
-
-    function calcularEstado(fechaHasta) {
+    function calcEstado(fechaHasta) {
       if (!fechaHasta) return { txt: '', cls: '' };
       const hoy = new Date();
-      const fecha = new Date(`${fechaHasta}T00:00:00`);
-      return (fecha < hoy.setHours(0, 0, 0, 0))
-        ? { txt: 'LIBRE', cls: 'estado-libre' }
+      const fin = new Date(`${fechaHasta}T00:00:00`);
+      return fin < hoy.setHours(0, 0, 0, 0)
+        ? { txt: 'LIBRE',   cls: 'estado-libre'   }
         : { txt: 'OCUPADO', cls: 'estado-ocupado' };
     }
 
     function renderHistorial() {
-  const altas = JSON.parse(localStorage.getItem('registrosUsuario')) || [];
-  const bajas = JSON.parse(localStorage.getItem('historialBajas')) || [];
-
-  const historial = [
-    ...altas.map(r => ({ ...r, tipo: 'ALTA' })),
-    ...bajas.map(r => ({ ...r, tipo: 'BAJA' }))
-  ];
-
-  tbody.innerHTML = '';
-  historial.forEach((registro, i) => {
-    const estado = calcularEstado(registro.fechaHasta);
-    tbody.insertAdjacentHTML('beforeend', `
-      <tr>
-        <td>${i + 1}</td>
-        <td>${registro.nombre}</td>
-        <td>${registro.apellido}</td>
-        <td>${registro.marca}</td>
-        <td>${registro.modelo}</td>
-        <td>${registro.software}</td>
-        <td>${registro.reservadoPor}</td>
-        <td>${registro.fechaHasta}</td>
-        <td class="${estado.cls}">${estado.txt}</td>
-        <td><strong>${registro.tipo}</strong></td>
-      </tr>
-    `);
-  });
-}
-
+      const movimientos = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+      tbody.innerHTML = '';
+      movimientos.forEach((m, i) => {
+        const est = calcEstado(m.fechaHasta);
+        tbody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${i + 1}</td>
+            <td class="accion-${m.accion.toLowerCase()}">${m.accion}</td>
+            <td>${new Date(m.timestamp).toLocaleString()}</td>
+            <td>${m.nombre}</td><td>${m.apellido}</td><td>${m.marca}</td>
+            <td>${m.modelo}</td><td>${m.software}</td>
+            <td>${m.reservadoPor}</td><td>${m.fechaHasta}</td>
+            <td class="${est.cls}">${est.txt}</td>
+          </tr>
+        `);
+      });
+    }
 
     document.addEventListener('DOMContentLoaded', renderHistorial);
+    window.addEventListener('storage', e => {
+      if (e.key === HISTORY_KEY) renderHistorial();   // refresco en tiempo real
+    });
   </script>
 </body>
 </html>
+
+
